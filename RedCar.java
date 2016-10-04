@@ -1,9 +1,5 @@
-public class Truck extends AbstractVehicle {
+public class RedCar extends AbstractVehicle {
 
-  public Truck(Pair<Coor, Coor> pair) {
-    this.start = pair.x;
-    this.end = pair.y;
-  }
 
   @Override
   public boolean canMoveA() {
@@ -15,16 +11,22 @@ public class Truck extends AbstractVehicle {
 
   }
 
-  @Override boolean moveA() {
+  @Override
+  public Coor moveA() {
     if (!canMoveA()) {
       throw new Exception("Invalid move direction A");
     }
   }
 
   @Override
-  public boolean moveB() {
+  public Coor moveB() {
     if (!canMoveB()) {
       throw new Exception("Invalid move direction B");
     }
+  }
+
+  //
+  public boolean canExit() {
+    
   }
 }

@@ -1,11 +1,11 @@
 /* Coor.java
  * POJO to hold a coordinate
  */
- 
+
 public Class Coor {
 
-  private int row;
-  private int col;
+  private final int row;
+  private final int col;
 
   public Coor(int row, int col) {
     this.row = row;
@@ -18,13 +18,5 @@ public Class Coor {
 
   public int getCol() {
     return col;
-  }
-
-  public void setRow(int row) {
-    this.row = row;
-  }
-
-  public void setCol(int col) {
-    this.col = col;
   }
 }

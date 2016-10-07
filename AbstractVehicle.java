@@ -1,6 +1,7 @@
 public abstract class AbstractVehicle implements Vehicle {
   private Coor start;
   private Coor end;
+  private boolean isTopDown;
 
   public Coor getStart() {
     return start;
@@ -14,13 +15,40 @@ public abstract class AbstractVehicle implements Vehicle {
     return isTruck(this);
   }
 
-  abstract void moveA(State state);
+  public boolean isTopDown() {
+    return isTopDown;
+  }
+
+  void moveA(State state) {
+    if (!canMoveA) {
+      throw new Exception("Can't move towards direction A");
+    }
+    if (isTopDown()) {
+      // Also update start and end
+      state.unmarkCoor();
+      state.markCoor();
+    }
+  }
+
+  void moveB(State state) {
+
+  }
 
   abstract void moveB(State state);
 
-  abstract boolean canMoveA(State state);
+  boolean canMoveA(State state) {
+    if (isTopDown()) {
+      return state.isMarked(new Coor(getStart().getRow() + 1, getStart().getCol()));
+    }
+    return state.isMarked(new Coor(getStart().getRow(), getStart().getCol() + 1));
+  }
 
-  abstract boolean canMoveB(State state);
+  boolean canMoveB(State state) {
+    if (isTopDown()) {
+      return state.isMarked(new Coor(getEnd().getRow() - 1, getEnd().getCol()));
+    }
+    return state.isMarked(new Coor(getEnd().getRow(), getEnd().getCol() - 1));
+  }
 
   // Does it make sense to have set methods for the coordinates?
 

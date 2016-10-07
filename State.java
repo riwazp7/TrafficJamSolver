@@ -1,6 +1,6 @@
 public class State {
 
-  int[][] board;
+  boolean[][] board;
   ArrayList<Vehicle> carList;
   Vehicle redCar;
 
@@ -21,12 +21,33 @@ public class State {
 
   private void markBoard() {
     for (Vehicle vehicle : carList) {
-      Coor start = 
+      Coor start = vehicle.getStart();
+      Coor end = vehicle.getEnd();
+      markCoor(start);
+      markCoor(end);
+      if (vehicle.isTruck()) {
+        Coor midCoor;
+        if (vehicle.isTopDown()) {
+          midCoor = new Coor((start.getRow() + end.getRow()) / 2, start.getCol());
+        } else {
+          midCoor = new Coor(start.getRow(), (start.getCol()+ end.getCol()) / 2);
+        }
+        markCoor(midCoor);
+      }
     }
   }
 
-  private void markCoor() {
+  // Use carefully
+  public void markCoor(Coor coor) {
+    board[coor.getRow()][coor.getCol()] = true;
+  }
 
+  public void unmarkCoor(Coor coor) {
+    board[coor.getRow()][coor.getCol()] = false;
+  }
+
+  public void isMarked(Coor coor) {
+    return board[coor.getRow()][coor.getCol()];
   }
 
 }

@@ -11,9 +11,10 @@ public abstract class AbstractVehicle implements Vehicle {
   public AbstractVehicle(Coor start, Coor end) {
     this.start = start;
     this.end = end;
-    //Set is Truck method please
+    if (start.getRow() != end.getRow()) isTopDown = true;
+    //Set is Truck method please. Need a boolean? Yes good idea.
+    //And is top down
   }
-
 
   public Coor getStart() {
     return start;
@@ -65,7 +66,7 @@ public abstract class AbstractVehicle implements Vehicle {
       end = newEnd;
     } else {
       // Move right
-      Coor newEnd = new Coor(start.getRow(), start.getCol() + 1);
+      Coor newEnd = new Coor(end.getRow(), end.getCol() + 1);
       state.markCoor(newEnd);
       state.unmarkCoor(start);
       start = new Coor(start.getRow(), start.getCol() + 1);
@@ -76,17 +77,17 @@ public abstract class AbstractVehicle implements Vehicle {
   // Handle out of board requests here instead?
   public boolean canMoveA(State state) {
     if (isTopDown()) {
-      return state.isMarked(new Coor(getStart().getRow() - 1, getStart().getCol()));
+      return !state.isMarked(new Coor(getStart().getRow() - 1, getStart().getCol()));
     }
-    return state.isMarked(new Coor(getStart().getRow(), getStart().getCol() - 1));
+    return !state.isMarked(new Coor(getStart().getRow(), getStart().getCol() - 1));
   }
 
   // Handle out of board requests?
   public boolean canMoveB(State state) {
     if (isTopDown()) {
-      return state.isMarked(new Coor(getEnd().getRow() + 1, getEnd().getCol()));
+      return !state.isMarked(new Coor(getEnd().getRow() + 1, getEnd().getCol()));
     }
-    return state.isMarked(new Coor(getEnd().getRow(), getEnd().getCol() + 1));
+    return !state.isMarked(new Coor(getEnd().getRow(), getEnd().getCol() + 1));
   }
 
   public static boolean isTruck(Pair<Coor, Coor> pair) {

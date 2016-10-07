@@ -1,4 +1,9 @@
 public abstract class AbstractVehicle implements Vehicle {
+
+  // Does it make sense to have set methods for the coordinates of a vehicle?
+  // Umm ...no?
+
+  // Start is strictly either the leftmost (for left-right) or the top most coordinate
   private Coor start;
   private Coor end;
   private boolean isTopDown;
@@ -20,37 +25,62 @@ public abstract class AbstractVehicle implements Vehicle {
   }
 
   void moveA(State state) {
-    if (!canMoveA) {
+    if (!canMoveA()) {
       throw new Exception("Can't move towards direction A");
     }
     if (isTopDown()) {
-      // Also update start and end
-      state.unmarkCoor();
-      state.markCoor();
+      // Move car top
+      Coor newStart = new Coor(start.getRow() - 1 , start.getCol());
+      state.unmarkCoor(end);
+      state.markCoor(newStart);
+      start = newStart;
+      end = new Coor(end.getRow() - 1, end.getCol());
+    } else {
+      // Move left
+      Coor newStart = new Coor(start.getRow(), start.getCol() - 1);
+      state.unmarkCoor(end);
+      state.markCoor(newStart);
+      start = newStart;
+      end = new Coor(end.getRow(), end.getCol() - 1);
     }
   }
 
   void moveB(State state) {
-
+    if (!canMoveB()) {
+      throw new Exception("Can't move towards direction B");
+    }
+    if (isTopDown()) {
+      // Move down
+      Coor newEnd = new Coor(end.getRow() + 1, end.getCol());
+      state.markCoor(newEnd);
+      start.unmarkCoor(start);
+      start = new Coor(start.getRow() + 1, start.getCol());
+      end = newEnd;
+    } else {
+      // Move right
+      Coor newEnd = new Coor(start.getRow(), start.getCol() + 1);
+      state.markCoor(newEnd);
+      state.unmarkCoor(start);
+      start = new Coor(start.getRow(), start.getCol() + 1);
+      end = newEnd;
+    }
   }
 
-  abstract void moveB(State state);
-
+  // Handle out of board requests here instead?
   boolean canMoveA(State state) {
     if (isTopDown()) {
-      return state.isMarked(new Coor(getStart().getRow() + 1, getStart().getCol()));
+      return state.isMarked(new Coor(getStart().getRow() - 1, getStart().getCol()));
     }
-    return state.isMarked(new Coor(getStart().getRow(), getStart().getCol() + 1));
+    return state.isMarked(new Coor(getStart().getRow(), getStart().getCol() - 1));
   }
 
+  // Handle out of board requests?
   boolean canMoveB(State state) {
     if (isTopDown()) {
-      return state.isMarked(new Coor(getEnd().getRow() - 1, getEnd().getCol()));
+      return state.isMarked(new Coor(getEnd().getRow() + 1, getEnd().getCol()));
     }
-    return state.isMarked(new Coor(getEnd().getRow(), getEnd().getCol() - 1));
+    return state.isMarked(new Coor(getEnd().getRow(), getEnd().getCol() + 1));
   }
-
-  // Does it make sense to have set methods for the coordinates?
 
   public static boolean isTruck(Pair<Coor, Coor> pair) {
     Coor start = pair.x;

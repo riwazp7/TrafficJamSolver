@@ -1,10 +1,27 @@
 public class State {
 
+  // Tracks empty coordinates on the board
   boolean[][] board;
+
+  // List of all the cars in the board. Also contains the red car!
   ArrayList<Vehicle> carList;
+
+  // The red car
   Vehicle redCar;
 
-  public State(int row, int col, ArrayList<Pair<Coor, Coor>> positions, Pair<Coor, Coor> redCarPos) {
+  // The coordinate the red car must exit through.
+  Coor exit;
+
+  // Default max no of rows
+  private int row = 6;
+
+  // Default max no of cols
+  private int col = 6;
+
+  public State(int row, int col, ArrayList<Pair<Coor, Coor>> positions, Pair<Coor, Coor> redCarPos, Coor exit) {
+    this.row = row;
+    this.col = col;
+    this.exit = exit;
     carList = new ArrayList<Vehicle>();
     board = new int[row][col];
     for (Pair pair : positions) {
@@ -14,7 +31,7 @@ public class State {
         carList.add(new Car(pair));
       }
     }
-    redCar = new RedCar(redCarPos);
+    this.redCar = new RedCar(redCarPos);
     carList.add(redCar);
     markBoard(carList);
   }
@@ -46,8 +63,19 @@ public class State {
     board[coor.getRow()][coor.getCol()] = false;
   }
 
+  // Handle out of board coordinates?
   public void isMarked(Coor coor) {
+    if (coor.getRow() >= row || coor.getCol >= col) {
+      return true;
+    }
     return board[coor.getRow()][coor.getCol()];
   }
 
+  public Coor getExit() {
+    return exit;
+  }
+
+  public static void main(String[] args) {
+
+  }
 }

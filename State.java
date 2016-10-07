@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class State {
 
   // Tracks empty coordinates on the board
@@ -23,8 +25,8 @@ public class State {
     this.col = col;
     this.exit = exit;
     carList = new ArrayList<Vehicle>();
-    board = new int[row][col];
-    for (Pair pair : positions) {
+    board = new boolean[row][col];
+    for (Pair<Coor, Coor> pair : positions) {
       if (AbstractVehicle.isTruck(pair)) {
         carList.add(new Truck(pair));
       } else {
@@ -33,7 +35,7 @@ public class State {
     }
     this.redCar = new RedCar(redCarPos);
     carList.add(redCar);
-    markBoard(carList);
+    markBoard();
   }
 
   private void markBoard() {
@@ -64,8 +66,8 @@ public class State {
   }
 
   // Handle out of board coordinates?
-  public void isMarked(Coor coor) {
-    if (coor.getRow() >= row || coor.getCol >= col) {
+  public boolean isMarked(Coor coor) {
+    if (coor.getRow() >= row || coor.getCol() >= col) {
       return true;
     }
     return board[coor.getRow()][coor.getCol()];
@@ -76,6 +78,7 @@ public class State {
   }
 
   public static void main(String[] args) {
+    ArrayList<Pair<Coor, Coor>> vehicles = new ArrayList<Pair<Coor, Coor>>();
 
   }
 }

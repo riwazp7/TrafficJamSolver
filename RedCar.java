@@ -1,4 +1,9 @@
 public class RedCar extends AbstractVehicle {
+
+  public RedCar(Pair<Coor, Coor> pair) {
+    super(pair.x, pair.y);
+  }
+
   // Assuming the red car is always top down
   public boolean canExit(State state) {
     Coor exit = state.getExit();

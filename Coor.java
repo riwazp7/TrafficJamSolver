@@ -2,7 +2,7 @@
  * POJO to hold a coordinate
  */
 
-public Class Coor {
+public class Coor {
 
   private final int row;
   private final int col;

@@ -4,9 +4,16 @@ public abstract class AbstractVehicle implements Vehicle {
   // Umm ...no?
 
   // Start is strictly either the leftmost (for left-right) or the top most coordinate
-  private Coor start;
-  private Coor end;
-  private boolean isTopDown;
+  protected Coor start;
+  protected Coor end;
+  protected boolean isTopDown;
+
+  public AbstractVehicle(Coor start, Coor end) {
+    this.start = start;
+    this.end = end;
+    //Set is Truck method please
+  }
+
 
   public Coor getStart() {
     return start;
@@ -24,9 +31,9 @@ public abstract class AbstractVehicle implements Vehicle {
     return isTopDown;
   }
 
-  void moveA(State state) {
-    if (!canMoveA()) {
-      throw new Exception("Can't move towards direction A");
+  public void moveA(State state) {
+    if (!canMoveA(state)) {
+      throw new RuntimeException("Can't move towards direction A");
     }
     if (isTopDown()) {
       // Move car top
@@ -45,15 +52,15 @@ public abstract class AbstractVehicle implements Vehicle {
     }
   }
 
-  void moveB(State state) {
-    if (!canMoveB()) {
-      throw new Exception("Can't move towards direction B");
+  public void moveB(State state) {
+    if (!canMoveB(state)) {
+      throw new RuntimeException("Can't move towards direction B");
     }
     if (isTopDown()) {
       // Move down
       Coor newEnd = new Coor(end.getRow() + 1, end.getCol());
       state.markCoor(newEnd);
-      start.unmarkCoor(start);
+      state.unmarkCoor(start);
       start = new Coor(start.getRow() + 1, start.getCol());
       end = newEnd;
     } else {
@@ -67,7 +74,7 @@ public abstract class AbstractVehicle implements Vehicle {
   }
 
   // Handle out of board requests here instead?
-  boolean canMoveA(State state) {
+  public boolean canMoveA(State state) {
     if (isTopDown()) {
       return state.isMarked(new Coor(getStart().getRow() - 1, getStart().getCol()));
     }
@@ -75,7 +82,7 @@ public abstract class AbstractVehicle implements Vehicle {
   }
 
   // Handle out of board requests?
-  boolean canMoveB(State state) {
+  public boolean canMoveB(State state) {
     if (isTopDown()) {
       return state.isMarked(new Coor(getEnd().getRow() + 1, getEnd().getCol()));
     }
@@ -86,7 +93,7 @@ public abstract class AbstractVehicle implements Vehicle {
     Coor start = pair.x;
     Coor end = pair.y;
     if (java.lang.Math.abs(start.getCol() - end.getCol()) == 3
-    || java.lang.Math.abs(start.getRow() - end.getRow())) == 3 {
+    || java.lang.Math.abs(start.getRow() - end.getRow()) == 3) {
       return true;
     }
     return false;

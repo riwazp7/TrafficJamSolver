@@ -1,4 +1,4 @@
-public Interface Vehicle {
+public interface Vehicle {
   public boolean isTruck();
   public boolean isTopDown();
   public Coor getStart();

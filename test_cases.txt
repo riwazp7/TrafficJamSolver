@@ -1,0 +1,7 @@
+// Cases to test the board for
+
+1) Move top-down car A and B directions
+2) Move right-left car A and B directions
+3) Repeat 1,2 for Trucks
+4) Try moving out of board boundary
+5) Test canExit() for RedCar with 0,1 and multiple cars blocking the exit.

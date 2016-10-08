@@ -12,7 +12,7 @@ public class State {
   ArrayList<Vehicle> carList;
 
   // The red car
-  Vehicle redCar;
+  RedCar redCar;
 
   // The coordinate the red car must exit through.
   Coor exit;
@@ -41,8 +41,19 @@ public class State {
     markBoard();
   }
 
+  public State(ArrayList<Vehicle> carList, RedCar redCar, Coor exit) {
+    this.carList = carList;
+    this.redCar = redCar;
+    this.exit = exit;
+  }
+
   public State(ArrayList<Pair<Coor, Coor>> positions, Pair<Coor, Coor> redCarPos, Coor exit) {
     this(DEFAULT_ROW, DEFAULT_COL, positions, redCarPos, exit);
+  }
+
+  public State(State pastState, int vehicleToMove, int dir) {
+    this(pastState.getCarList(), pastState.getRedCar(), pastState.getExit());
+    carList.()
   }
 
   private void markBoard() {
@@ -56,7 +67,7 @@ public class State {
         if (vehicle.isTopDown()) {
           midCoor = new Coor((start.getRow() + end.getRow()) / 2, start.getCol());
         } else {
-          midCoor = new Coor(start.getRow(), (start.getCol()+ end.getCol()) / 2);
+          midCoor = new Coor(start.getRow(), (start.getCol() + end.getCol()) / 2);
         }
         markCoor(midCoor);
       }
@@ -84,6 +95,22 @@ public class State {
     return exit;
   }
 
+  public boolean done() {
+    return redCar.canExit(this);
+  }
+
+  public ArrayList<Vehicle> getCarList() {
+    return carList;
+  }
+
+  public RedCar getRedCar() {
+    return redCar;
+  }
+
+  public int totalVehicles() {
+    return carList.size();
+  }
+
   public void printState() {
     for (int i = 0; i < row; i++) {
       for (int j = 0; j < col; j++) {
@@ -98,28 +125,19 @@ public class State {
     System.out.println();
   }
 
-  // JUST FOR TESTTING
-  public void move() {
-    carList.get(0).moveA(this);
-    redCar.moveA(this);
+  public boolean canMoveA(int index) {
+    return carList.get(index).canMoveA(this);
   }
 
-  //Just for TESTTING
-  public void moveAgain() {
-    carList.get(0).moveB(this);
-    redCar.moveB(this);
+  public boolean canMoveB(int index) {
+    return carList.get(index).canMoveB(this);
   }
 
-  public static void main(String[] args) {
-    ArrayList<Pair<Coor, Coor>> vehicles = new ArrayList<Pair<Coor, Coor>>();
-    vehicles.add(new Pair<Coor, Coor>(new Coor(1,2), new Coor(2,2)));
-    Pair <Coor, Coor> red = new Pair<Coor, Coor>(new Coor(3,4), new Coor(3,5)); // Invalid btw
-    State state = new State(vehicles, red, new Coor(0,5));
-    state.printState();
-    state.move();
-    state.printState();
-    state.moveAgain();
-    state.printState();
+  public void moveA(int index) {
+    carList.get(index).moveA(this);
+  }
 
+  public void moveB(int index) {
+    carList.get(index).moveB(this);
   }
 }

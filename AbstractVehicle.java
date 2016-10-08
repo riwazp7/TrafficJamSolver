@@ -93,8 +93,8 @@ public abstract class AbstractVehicle implements Vehicle {
   public static boolean isTruck(Pair<Coor, Coor> pair) {
     Coor start = pair.x;
     Coor end = pair.y;
-    if (java.lang.Math.abs(start.getCol() - end.getCol()) == 3
-    || java.lang.Math.abs(start.getRow() - end.getRow()) == 3) {
+    if (java.lang.Math.abs(start.getCol() - end.getCol()) == 2
+    || java.lang.Math.abs(start.getRow() - end.getRow()) == 2) {
       return true;
     }
     return false;

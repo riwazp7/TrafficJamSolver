@@ -1,37 +1,48 @@
+/* Vehicle.java
+ * (c) RIWAZ POUDYAL 2016
+ * Stores a vehicle which is a part of a state
+ * A vehicle can either be a Truck (length 3) or a Car (length 2)
+ * It can be top-down or left-right
+ * Vehicles can move in either the A or the B direction
+ * A direction is top for top-down vehicles and left for left-right vehicles.
+ * So, B direction is down for top-down and right for left-right vehicles.
+ */
+
 public class Vehicle implements VehicleInterface {
 
-  // Does it make sense to have set methods for the coordinates of a vehicle?
-  // Umm ...no?
-
-  // Start is strictly either the leftmost (for left-right) or the top most coordinate
+  // Start is strictly either the leftmost (for left-right)
+  // or the topmost (for top-down) coordinate
   protected Coor start;
   protected Coor end;
-  protected boolean isTopDown;
+  protected final boolean isTopDown;
+  protected final boolean isTruck;
+
 
   public Vehicle(Coor start, Coor end) {
     this.start = start;
     this.end = end;
-    setTopDown();
-    //Set is Truck method please. Need a boolean? Yes good idea.
-    //And is top down
+    this.isTopDown = Vehicle.isTopDown(start, end);
+    this.isTruck = Vehicle.isTruck(start, end);
   }
 
   public Vehicle(Pair<Coor, Coor> pair) {
     this.start = pair.x;
     this.end = pair.y;
-    setTopDown();
+    this.isTopDown = Vehicle.isTopDown(start, end);
+    this.isTruck = Vehicle.isTruck(start, end);
   }
 
+  // This constructor clones a given vehicle
   public Vehicle(Vehicle vehicle) {
     this.start = vehicle.getStart();
     this.end = vehicle.getEnd();
-    setTopDown();
+    this.isTopDown = vehicle.isTopDown(start, end);
+    this.isTruck = vehicle.isTruck(start, end);
   }
 
-  public void setTopDown() {
-    if (start.getRow() != end.getRow()) isTopDown = true;
-  }
-
+  /*
+   *  Getter methods
+   */
   public Coor getStart() {
     return start;
   }
@@ -41,12 +52,30 @@ public class Vehicle implements VehicleInterface {
   }
 
   public boolean isTruck() {
-    return isTruck(this);
+    return isTruck;
   }
 
   public boolean isTopDown() {
     return isTopDown;
   }
+
+  /*
+   *  Methods to check if a move is possible and change a vehicle's position
+   *  Start and/or End coordinates modified.
+   */
+   public boolean canMoveA(State state) {
+     if (isTopDown()) {
+       return !state.isMarked(new Coor(getStart().getRow() - 1, getStart().getCol()));
+     }
+     return !state.isMarked(new Coor(getStart().getRow(), getStart().getCol() - 1));
+   }
+
+   public boolean canMoveB(State state) {
+     if (isTopDown()) {
+       return !state.isMarked(new Coor(getEnd().getRow() + 1, getEnd().getCol()));
+     }
+     return !state.isMarked(new Coor(getEnd().getRow(), getEnd().getCol() + 1));
+   }
 
   public void moveA(State state) {
     if (!canMoveA(state)) {
@@ -90,25 +119,10 @@ public class Vehicle implements VehicleInterface {
     }
   }
 
-  // Handle out of board requests here instead?
-  public boolean canMoveA(State state) {
-    if (isTopDown()) {
-      return !state.isMarked(new Coor(getStart().getRow() - 1, getStart().getCol()));
-    }
-    return !state.isMarked(new Coor(getStart().getRow(), getStart().getCol() - 1));
-  }
-
-  // Handle out of board requests?
-  public boolean canMoveB(State state) {
-    if (isTopDown()) {
-      return !state.isMarked(new Coor(getEnd().getRow() + 1, getEnd().getCol()));
-    }
-    return !state.isMarked(new Coor(getEnd().getRow(), getEnd().getCol() + 1));
-  }
-
-  public static boolean isTruck(Pair<Coor, Coor> pair) {
-    Coor start = pair.x;
-    Coor end = pair.y;
+  /*
+   *  Static helper methods
+   */
+  public static boolean isTruck(Coor start, Coor end) {
     if (java.lang.Math.abs(start.getCol() - end.getCol()) == 2
     || java.lang.Math.abs(start.getRow() - end.getRow()) == 2) {
       return true;
@@ -116,8 +130,11 @@ public class Vehicle implements VehicleInterface {
     return false;
   }
 
-  public static boolean isTruck(Vehicle vehicle) {
-    return isTruck(new Pair<Coor, Coor>(vehicle.getStart(), vehicle.getEnd()));
+  public static boolean isTopDown(Coor start, Coor end) {
+    if (start.getRow() != end.getRow()) {
+     return true;
+   }
+    return false;
   }
 
 }

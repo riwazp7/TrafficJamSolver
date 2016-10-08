@@ -1,5 +1,6 @@
 /* Coor.java
- * POJO to hold a coordinate
+ * (c) RIWAZ POUDYAL 2016
+ * immutable POJO to hold a coordinate
  */
 
 public class Coor {

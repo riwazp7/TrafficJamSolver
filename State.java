@@ -5,13 +5,14 @@ import java.util.ArrayList;
 
 public class State {
 
+  // Default max no of rows and cols
   private final static int DEFAULT_ROW = 6;
   private final static int DEFAULT_COL = 6;
 
   // Tracks empty coordinates on the board
   boolean[][] board;
 
-  // List of all the cars in the board. DOES NOT contain the red car!
+  // List of all the cars in the board. DOES NOT contain the red car.
   ArrayList<Vehicle> carList;
 
   // The red car
@@ -20,10 +21,8 @@ public class State {
   // The coordinate the red car must exit through.
   Coor exit;
 
-  // Default max no of rows
+  // Number of rows and cols
   private int row;
-
-  // Default max no of cols
   private int col;
 
   public State(int row, int col, ArrayList<Pair<Coor, Coor>> positions, Pair<Coor, Coor> redCarPos, Coor exit) {
@@ -52,9 +51,25 @@ public class State {
     for (Vehicle vehicle : pastState.getCarList()) {
       carList.add(new Vehicle(vehicle));
     }
+    this.row = pastState.getRow();
+    this.col =  pastState.getCol();
     this.carList = carList;
     this.redCar = new RedCar(pastState.getRedCar());
     this.exit = exit;
+    markBoard();
+    if (dir) {
+      if (vehicleToMove == -1) {
+        redCar.moveA(this);
+      } else {
+        carList.get(vehicleToMove).moveA(this);
+      }
+    } else {
+      if (vehicleToMove == -1) {
+        redCar.moveB(this);
+      } else {
+        carList.get(vehicleToMove).moveB(this);
+      }
+    }
   }
 
   private void markBoard() {
@@ -106,6 +121,14 @@ public class State {
 
   public RedCar getRedCar() {
     return redCar;
+  }
+
+  public int getRow() {
+    return row;
+  }
+
+  public int getCol() {
+    return col;
   }
 
   public int totalVehicles() {

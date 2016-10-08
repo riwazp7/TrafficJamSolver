@@ -7,7 +7,13 @@ public final class TrafficJam {
 
   public static void main(String[] args) {
     State stateA = TrafficJam.getStateA();
-    TrafficJam.dfs(stateA);
+    stateA.printState();
+    State stateAcopy = new State(stateA);
+    stateAcopy.printState();
+    stateAcopy.moveA(3);
+
+    stateA.printState();
+    stateAcopy.printState();
   }
 
   public static boolean dfs(State state) {

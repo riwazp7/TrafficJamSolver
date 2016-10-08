@@ -25,6 +25,10 @@ public class State {
   private int row;
   private int col;
 
+  /*
+   * Build a state out of an ArrayList of Pairs of vehicle coordinates,
+   * position of the red car, and coordinate of exit.
+   */
   public State(int row, int col, ArrayList<Pair<Coor, Coor>> positions, Pair<Coor, Coor> redCarPos, Coor exit) {
     this.row = row;
     this.col = col;
@@ -35,7 +39,7 @@ public class State {
       carList.add(new Vehicle(pair));
     }
     this.redCar = new RedCar(redCarPos);
-    carList.add(redCar);
+    //carList.add(redCar);
     markBoard();
   }
 
@@ -43,35 +47,24 @@ public class State {
     this(DEFAULT_ROW, DEFAULT_COL, positions, redCarPos, exit);
   }
 
-  // -1 means move redCar
-  // dir: true ---> moveA
-  //    : false ---> moveB
-  public State(State pastState, int vehicleToMove, boolean dir) {
+  /*
+   * Build a new State identical to the given state.
+   */
+  public State(State pastState) {
     ArrayList<Vehicle> carList = new ArrayList<Vehicle>();
     for (Vehicle vehicle : pastState.getCarList()) {
       carList.add(new Vehicle(vehicle));
     }
     this.row = pastState.getRow();
     this.col =  pastState.getCol();
+    this.board = new boolean[row][col];
     this.carList = carList;
     this.redCar = new RedCar(pastState.getRedCar());
     this.exit = exit;
     markBoard();
-    if (dir) {
-      if (vehicleToMove == -1) {
-        redCar.moveA(this);
-      } else {
-        carList.get(vehicleToMove).moveA(this);
-      }
-    } else {
-      if (vehicleToMove == -1) {
-        redCar.moveB(this);
-      } else {
-        carList.get(vehicleToMove).moveB(this);
-      }
-    }
   }
 
+  // Mark the board based on cars in CarList.
   private void markBoard() {
     for (Vehicle vehicle : carList) {
       Coor start = vehicle.getStart();
@@ -88,6 +81,8 @@ public class State {
         markCoor(midCoor);
       }
     }
+    markCoor(redCar.getStart());
+    markCoor(redCar.getEnd());
   }
 
   // Use carefully

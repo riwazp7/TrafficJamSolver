@@ -20,4 +20,8 @@ public class Coor {
   public int getCol() {
     return col;
   }
+
+  public String toString() {
+    return ("("+row+","+col+")");
+  }
 }

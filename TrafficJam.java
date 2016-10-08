@@ -4,7 +4,7 @@ public final class TrafficJam {
 
   public static void main(String[] args) {
     State stateA = TrafficJam.getStateA();
-    TrafficJam.dfs(stateA).printState();
+    TrafficJam.dfs(stateA);
   }
 
   public static boolean dfs(State state) {
@@ -12,6 +12,7 @@ public final class TrafficJam {
       for (int i = 0; i < state.totalVehicles(); i++) {
 
       }
+      return false;
   }
 
   public static State getStateA() {

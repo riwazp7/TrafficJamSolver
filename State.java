@@ -8,7 +8,7 @@ public class State {
   // Tracks empty coordinates on the board
   boolean[][] board;
 
-  // List of all the cars in the board. Also contains the red car!
+  // List of all the cars in the board. DOES NOT contain the red car!
   ArrayList<Vehicle> carList;
 
   // The red car
@@ -30,30 +30,28 @@ public class State {
     carList = new ArrayList<Vehicle>();
     board = new boolean[row][col];
     for (Pair<Coor, Coor> pair : positions) {
-      if (AbstractVehicle.isTruck(pair)) {
-        carList.add(new Truck(pair));
-      } else {
-        carList.add(new Car(pair));
-      }
+      carList.add(new Vehicle(pair));
     }
     this.redCar = new RedCar(redCarPos);
     carList.add(redCar);
     markBoard();
   }
 
-  public State(ArrayList<Vehicle> carList, RedCar redCar, Coor exit) {
-    this.carList = carList;
-    this.redCar = redCar;
-    this.exit = exit;
-  }
-
   public State(ArrayList<Pair<Coor, Coor>> positions, Pair<Coor, Coor> redCarPos, Coor exit) {
     this(DEFAULT_ROW, DEFAULT_COL, positions, redCarPos, exit);
   }
 
-  public State(State pastState, int vehicleToMove, int dir) {
-    this(pastState.getCarList(), pastState.getRedCar(), pastState.getExit());
-    carList.()
+  // -1 means move redCar
+  // dir: true ---> moveA
+  //    : false ---> moveB
+  public State(State pastState, int vehicleToMove, boolean dir) {
+    ArrayList<Vehicle> carList = new ArrayList<Vehicle>();
+    for (Vehicle vehicle : pastState.getCarList()) {
+      carList.add(new Vehicle(vehicle));
+    }
+    this.carList = carList;
+    this.redCar = new RedCar(pastState.getRedCar());
+    this.exit = exit;
   }
 
   private void markBoard() {

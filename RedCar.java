@@ -1,8 +1,13 @@
-public class RedCar extends AbstractVehicle {
+public class RedCar extends Vehicle {
 
   public RedCar(Pair<Coor, Coor> pair) {
-    super(pair.x, pair.y);
+    super(pair);
   }
+
+  public RedCar(RedCar redCar) {
+    super((Vehicle) redCar);
+  }
+
 
   // Assuming the red car is always top down
   public boolean canExit(State state) {

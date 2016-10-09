@@ -1,4 +1,9 @@
 /* TrafficJam.java
+ * (c) RIWAZ POUDYAL
+ * Implements an A* algorithm to solve the TrafficJam puzzle.
+ */
+
+/* TrafficJam.java
  * (c) RIWAZ POUDYAL 2016
  */
 import java.util.ArrayList;
@@ -10,28 +15,20 @@ public final class TrafficJam {
   public static void main(String[] args) {
     State startState = TrafficJam.getStateC();
 
-    /*
-    startState.printBoardState();
-    for (State st : startState.getAllAdjacentStates()) {
-      st.printBoardState();
-    }
-    */
-
+    PriorityQueue<State> queue = new PriorityQueue<State>();
     ArrayList<State> seen = new ArrayList<State>();
-    seen.add(startState);
-    PriorityQueue<State> queue = startState.getAllAdjacentStates();
-    while (queue.size() > 0) {
-      PriorityQueue<State> newQueue = queue.poll().getAllAdjacentStates();
-      for (State state : newQueue) {
-        if (state.done()) {
-          System.out.println(state);
-          System.out.println(state.getEstimatedCost());
-          return;
-        }
-        if (!seen.contains(state)) {
-          seen.add(state);
-          queue.add(state);
-        }
+    queue.add(startState);
+    while (queue.size() != 0) {
+      State st = queue.poll();
+      if (seen.contains(st)) continue;
+      if (st.done()) {
+        System.out.println(st);
+        System.out.println(st.getEstimatedCost());
+        break;
+      }
+      seen.add(st);
+      for (State s : st.getAllAdjacentStates()){
+        queue.add(s);
       }
     }
     System.out.println(seen.size());
@@ -84,24 +81,6 @@ public final class TrafficJam {
     vehicles.add(new Pair<Coor,Coor>(new Coor(4,3), new Coor(4,5)));
 
     Pair<Coor, Coor> red = new Pair<Coor, Coor>(new Coor(2,5), new Coor(3,5));
-
-    State state = new State(vehicles, red, new Coor(0,5));
-    return state;
-  }
-
-
-
-  public static State getStateZ() {
-    ArrayList<Pair<Coor, Coor>> vehicles = new ArrayList<Pair<Coor, Coor>>();
-
-    vehicles.add(new Pair<Coor, Coor>(new Coor(0,3), new Coor(1,3)));
-    vehicles.add(new Pair<Coor, Coor>(new Coor(0,4), new Coor(0,5)));
-    vehicles.add(new Pair<Coor, Coor>(new Coor(1,4), new Coor(1,5)));
-    vehicles.add(new Pair<Coor, Coor>(new Coor(2,0), new Coor(3,0)));
-    vehicles.add(new Pair<Coor, Coor>(new Coor(2,4), new Coor(2,5)));
-    vehicles.add(new Pair<Coor, Coor>(new Coor(4,2), new Coor(4,4)));
-
-    Pair<Coor, Coor> red = new Pair<Coor, Coor>(new Coor(3,5), new Coor(4,5));
 
     State state = new State(vehicles, red, new Coor(0,5));
     return state;

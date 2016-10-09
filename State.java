@@ -4,7 +4,7 @@
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-public class State implements Comparable<State> {
+public final class State implements Comparable<State> {
 
   // Moves taken so far from the initial state.
   int movesSoFar;
@@ -12,7 +12,7 @@ public class State implements Comparable<State> {
   // Tracks empty coordinates on the board
   boolean[][] board;
 
-  // List of all the cars in the board. DOES NOT contain the red car.
+  // List of all the cars in the board. Contains the red car as the last entry.
   ArrayList<Vehicle> carList;
 
   // The red car
@@ -139,6 +139,7 @@ public class State implements Comparable<State> {
     return carList.size();
   }
 
+  // Check if this state is the goal state
   public boolean done() {
     return redCar.canExit(this);
   }
@@ -199,10 +200,12 @@ public class State implements Comparable<State> {
     return result;
   }
 
+  // Compares two states based on our evaluation function
   public int compareTo(State s) {
     return getEstimatedCost().compareTo(s.getEstimatedCost());
   }
 
+  // The evaluation function
   public Integer getEstimatedCost() {
     return new Integer(redCar.getHeuristicValue(this) + this.movesSoFar);
   }
@@ -229,12 +232,13 @@ public class State implements Comparable<State> {
     return false;
   }
 
+  /* Unused function.
+   * Can be used to increase speed for bigger puzzles.
+   */
   public int hashCode() {
     int hash = carList.get(0).getStart().getRow() * 10 + carList.get(0).getStart().getCol();
     hash = hash * 100 + redCar.getStart().getRow()* 10 + redCar.getStart().getCol();
     hash = hash * 100 + carList.get(3).getStart().getRow() * 10 + carList.get(3).getStart().getCol();
-    hash = hash * 100 + carList.get(5).getStart().getRow() * 10 + carList.get(5).getStart().getCol();
-    hash = hash * 100 + carList.get(4).getStart().getRow() * 10 + carList.get(4).getStart().getCol();
     return hash;
   }
 }

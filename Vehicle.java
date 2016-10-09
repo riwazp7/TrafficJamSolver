@@ -5,18 +5,22 @@
  * It can be top-down or left-right
  * Vehicles can move in either the A or the B direction
  * A direction is top for top-down vehicles and left for left-right vehicles.
- * So, B direction is down for top-down and right for left-right vehicles.
+ * B direction is down for top-down and right for left-right vehicles.
  */
 
 public class Vehicle implements VehicleInterface {
 
+  // Start and End coordinates of a vehicle
   // Start is strictly either the leftmost (for left-right)
   // or the topmost (for top-down) coordinate
   protected Coor start;
   protected Coor end;
-  protected final boolean isTopDown;
-  protected final boolean isTruck;
 
+  // true if vehicle is top-down
+  protected final boolean isTopDown;
+
+  // true if vehicle is a truck
+  protected final boolean isTruck;
 
   public Vehicle(Coor start, Coor end) {
     this.start = start;
@@ -113,6 +117,7 @@ public class Vehicle implements VehicleInterface {
     }
   }
 
+  @Override
   public boolean equals(Object obj) {
     if (obj instanceof Vehicle) {
       Vehicle vehicle = (Vehicle) obj;
@@ -121,6 +126,7 @@ public class Vehicle implements VehicleInterface {
     return false;
   }
 
+  @Override
   public String toString() {
     return start.toString() + " " + end.toString();
   }

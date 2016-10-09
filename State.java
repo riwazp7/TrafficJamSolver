@@ -6,10 +6,6 @@ import java.util.PriorityQueue;
 
 public class State implements Comparable<State> {
 
-  // Default max no of rows and cols
-  private final static int DEFAULT_ROW = 6;
-  private final static int DEFAULT_COL = 6;
-
   // Moves taken so far from the initial state.
   int movesSoFar;
 
@@ -26,49 +22,52 @@ public class State implements Comparable<State> {
   Coor exit;
 
   // Number of rows and cols
-  private int row;
-  private int col;
+  private int row = 6;
+  private int col = 6;
 
   /*
    * Build a state out of an ArrayList of Pairs of vehicle coordinates,
    * position of the red car, and coordinate of exit.
    */
-  public State(int row, int col, ArrayList<Pair<Coor, Coor>> positions, Pair<Coor, Coor> redCarPos, Coor exit) {
-    this.row = row;
-    this.col = col;
+  public State(ArrayList<Pair<Coor, Coor>> positions, Pair<Coor, Coor> redCarPos, Coor exit) {
+    carList = new ArrayList<Vehicle>();
     this.exit = exit;
     this.movesSoFar = 0;
-    carList = new ArrayList<Vehicle>();
+    this.redCar = new RedCar(redCarPos);
+    carList.add(redCar);
     board = new boolean[row][col];
     for (Pair<Coor, Coor> pair : positions) {
       carList.add(new Vehicle(pair));
     }
-    this.redCar = new RedCar(redCarPos);
-    //carList.add(redCar);
     markBoard();
-  }
-
-  public State(ArrayList<Pair<Coor, Coor>> positions, Pair<Coor, Coor> redCarPos, Coor exit) {
-    this(DEFAULT_ROW, DEFAULT_COL, positions, redCarPos, exit);
   }
 
   /*
    * Build a new State identical to the given state.
    */
   public State(State pastState) {
-    ArrayList<Vehicle> carList = new ArrayList<Vehicle>();
-    for (Vehicle vehicle : pastState.getCarList()) {
-      carList.add(new Vehicle(vehicle));
-    }
-    this.row = pastState.getRow();
-    this.col =  pastState.getCol();
-    this.board = new boolean[row][col];
-    this.carList = carList;
     this.redCar = new RedCar(pastState.getRedCar());
+    ArrayList<Vehicle> carList = new ArrayList<Vehicle>();
+    carList.add(redCar);
+    ArrayList<Vehicle> oldCarList = pastState.getCarList();
+    for (int i = 1; i < oldCarList.size(); i++) {
+      carList.add(new Vehicle(oldCarList.get(i)));
+    }
+    this.carList = carList;
+    this.board = new boolean[row][col];
     this.exit = pastState.getExit();
     this.movesSoFar = pastState.getMovesSoFar();
-    markBoard();
+    boolean[][] oldBoard = pastState.getBoard();
+    for (int i = 0; i < row; i++) {
+      for (int j = 0; j < col; j++) {
+        board[i][j] = oldBoard[i][j];
+      }
+    }
   }
+
+  /*
+   *  Methods related to marking or checking a mark in the board
+   */
 
   // Mark the board based on cars in CarList.
   private void markBoard() {
@@ -87,11 +86,8 @@ public class State implements Comparable<State> {
         markCoor(midCoor);
       }
     }
-    markCoor(redCar.getStart());
-    markCoor(redCar.getEnd());
   }
 
-  // Use carefully
   public void markCoor(Coor coor) {
     board[coor.getRow()][coor.getCol()] = true;
   }
@@ -108,16 +104,19 @@ public class State implements Comparable<State> {
     return board[coor.getRow()][coor.getCol()];
   }
 
+  /*
+   * Getter methods for state variables
+   */
   public Coor getExit() {
     return exit;
   }
 
-  public boolean done() {
-    return redCar.canExit(this);
-  }
-
   public ArrayList<Vehicle> getCarList() {
     return carList;
+  }
+
+  public boolean[][] getBoard() {
+    return board;
   }
 
   public RedCar getRedCar() {
@@ -140,6 +139,10 @@ public class State implements Comparable<State> {
     return carList.size();
   }
 
+  public boolean done() {
+    return redCar.canExit(this);
+  }
+
   public void printBoardState() {
     for (int i = 0; i < row; i++) {
       for (int j = 0; j < col; j++) {
@@ -154,6 +157,9 @@ public class State implements Comparable<State> {
     System.out.println();
   }
 
+  /*
+   * Methods to move vehicles at the given index
+   */
   public boolean canMoveA(int index) {
     return carList.get(index).canMoveA(this);
   }
@@ -172,6 +178,8 @@ public class State implements Comparable<State> {
     carList.get(index).moveB(this);
   }
 
+  // Returns all adjacent states that can be reached by moving one car one move
+  // in any direction
   public PriorityQueue<State> getAllAdjacentStates() {
     PriorityQueue<State> result = new PriorityQueue<State>();
     for (int i = 0; i < carList.size(); i++) {
@@ -209,7 +217,7 @@ public class State implements Comparable<State> {
     return true;
   }
 
-  public int nothashCode() {
+  public int hashCode() {
     int hash = carList.get(0).getStart().getRow() * 10 + carList.get(0).getStart().getCol();
     hash = hash * 100 + redCar.getStart().getRow()* 10 + redCar.getStart().getCol();
     hash = hash * 100 + carList.get(3).getStart().getRow() * 10 + carList.get(3).getStart().getCol();

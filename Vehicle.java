@@ -36,8 +36,8 @@ public class Vehicle implements VehicleInterface {
   public Vehicle(Vehicle vehicle) {
     this.start = vehicle.getStart();
     this.end = vehicle.getEnd();
-    this.isTopDown = vehicle.isTopDown(start, end);
-    this.isTruck = vehicle.isTruck(start, end);
+    this.isTopDown = vehicle.isTopDown();
+    this.isTruck = vehicle.isTruck();
   }
 
   /*
@@ -78,9 +78,6 @@ public class Vehicle implements VehicleInterface {
    }
 
   public void moveA(State state) {
-    if (!canMoveA(state)) {
-      throw new RuntimeException("Can't move towards direction A");
-    }
     if (isTopDown()) {
       // Move car top
       Coor newStart = new Coor(start.getRow() - 1 , start.getCol());
@@ -99,9 +96,6 @@ public class Vehicle implements VehicleInterface {
   }
 
   public void moveB(State state) {
-    if (!canMoveB(state)) {
-      throw new RuntimeException("Can't move towards direction B");
-    }
     if (isTopDown()) {
       // Move down
       Coor newEnd = new Coor(end.getRow() + 1, end.getCol());

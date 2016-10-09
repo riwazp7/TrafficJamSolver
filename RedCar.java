@@ -5,46 +5,37 @@ public class RedCar extends Vehicle implements RedCarInterface {
 
   public RedCar(Pair<Coor, Coor> pair) {
     super(pair);
-    confirmTopDown();
   }
 
   public RedCar(RedCar redCar) {
     super((Vehicle) redCar);
-    confirmTopDown();
-  }
-
-  private void confirmTopDown() {
-    if (!isTopDown()) {
-      throw new RuntimeException("RedCar cannot be left-right");
-    }
   }
 
   public boolean canExit(State state) {
-    Coor exit = state.getExit();
-    Coor currCoor = start;
-    while(true) {
-      if (currCoor.getRow() == exit.getRow()) {
-        return true;
-      } else if (state.isMarked(new Coor(currCoor.getRow() -1 , currCoor.getCol()))) {
+    int exitCol = state.getExit().getCol();
+    int redCarRow = start.getRow() - 1;
+    boolean[][] board = state.getBoard();
+    while (redCarRow >= 0) {
+      if (board[redCarRow][exitCol]) {
         return false;
-      } else {
-        currCoor = new Coor(currCoor.getRow() - 1, currCoor.getCol());
       }
+      redCarRow--;
     }
+    return true;
   }
 
-  public Integer getHeuristicValue(State state) {
-    Integer value = new Integer(0);
-    Coor exit = state.getExit();
-    Coor currCoor = start;
-    while(true) {
-      if (currCoor.getRow() == exit.getRow()) {
-        return value;
-      } else if (state.isMarked(new Coor(currCoor.getRow() -1 , currCoor.getCol()))) {
-        value += 1;
+  public int getHeuristicValue(State state) {
+    int exitCol = state.getExit().getCol();
+    int redCarRow = start.getRow() - 1;
+    int value = 0;
+    boolean[][] board = state.getBoard();
+    while (redCarRow >= 0) {
+      if (board[redCarRow][exitCol]) {
+        value++;
       }
-      currCoor = new Coor(currCoor.getRow() - 1, currCoor.getCol());
+      redCarRow--;
     }
+    return value;
   }
 
   public boolean equals(Vehicle vehicle) {

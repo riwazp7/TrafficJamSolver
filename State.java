@@ -2,8 +2,9 @@
  * (c) RIWAZ POUDYAL 2016
  */
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
-public class State {
+public class State implements Comparable<State> {
 
   // Default max no of rows and cols
   private final static int DEFAULT_ROW = 6;
@@ -94,7 +95,7 @@ public class State {
     board[coor.getRow()][coor.getCol()] = false;
   }
 
-  // Handle out of board coordinates?
+  // Handles out of board coordinates too
   public boolean isMarked(Coor coor) {
     if (coor.getRow() >= row || coor.getCol() >= col) {
       return true;
@@ -158,5 +159,26 @@ public class State {
 
   public void moveB(int index) {
     carList.get(index).moveB(this);
+  }
+
+  public PriorityQueue<State> getAllAdjacentStates() {
+    PriorityQueue<State> result = new PriorityQueue<State>();
+    for (int i = 0; i <= carList.size(); i++) {
+      if (canMoveA(i)) {
+        State newState = new State(this);
+        newState.moveA(i);
+        result.add(newState);
+      }
+      if (canMoveB(i)) {
+        State newState = new State(this);
+        newState.moveB(i);
+        result.add(newState);
+      }
+    }
+    return result;
+  }
+
+  public int compareTo(State s) {
+    return this.redCar.getHeuristicValue().compareTo(s.getRedCar().getHeuristicValue());
   }
 }

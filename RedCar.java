@@ -32,4 +32,8 @@ public class RedCar extends Vehicle implements RedCarInterface {
       }
     }
   }
+
+  public Integer getHeuristicValue() {
+    return 0;
+  }
 }

@@ -25,6 +25,8 @@ public final class State implements Comparable<State> {
   private int row = 6;
   private int col = 6;
 
+  ArrayList<State> stateProgression = new ArrayList<State>();
+
   /*
    * Build a state out of an ArrayList of Pairs of vehicle coordinates,
    * position of the red car, and coordinate of exit.
@@ -40,6 +42,7 @@ public final class State implements Comparable<State> {
     }
     carList.add(redCar);
     markBoard();
+    stateProgression.add(this);
   }
 
   /*
@@ -63,6 +66,10 @@ public final class State implements Comparable<State> {
         board[i][j] = oldBoard[i][j];
       }
     }
+    for (State st : pastState.getStateProgression()) {
+      stateProgression.add(st);
+    }
+    stateProgression.add(this);
   }
 
   /*
@@ -137,6 +144,10 @@ public final class State implements Comparable<State> {
 
   public int totalVehicles() {
     return carList.size();
+  }
+
+  public ArrayList<State> getStateProgression() {
+    return stateProgression;
   }
 
   // Check if this state is the goal state

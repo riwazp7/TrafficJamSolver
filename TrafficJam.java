@@ -13,7 +13,7 @@ import java.util.HashSet;
 public final class TrafficJam {
 
   public static void main(String[] args) {
-    State startState = TrafficJam.getStateC();
+    State startState = TrafficJam.getStateB();
 
     PriorityQueue<State> queue = new PriorityQueue<State>();
     ArrayList<State> seen = new ArrayList<State>();
@@ -22,7 +22,9 @@ public final class TrafficJam {
       State st = queue.poll();
       if (seen.contains(st)) continue;
       if (st.done()) {
-        System.out.println(st);
+        for (State s : st.getStateProgression()) {
+          System.out.println(s);
+        }
         System.out.println(st.getEstimatedCost());
         break;
       }

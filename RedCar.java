@@ -46,4 +46,8 @@ public class RedCar extends Vehicle implements RedCarInterface {
       currCoor = new Coor(currCoor.getRow() - 1, currCoor.getCol());
     }
   }
+
+  public boolean equals(Vehicle vehicle) {
+    return (start.equals(vehicle.getStart()) && end.equals(vehicle.getEnd()));
+  }
 }

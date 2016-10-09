@@ -119,6 +119,10 @@ public class Vehicle implements VehicleInterface {
     }
   }
 
+  public boolean equals(Vehicle vehicle) {
+    return (start.equals(vehicle.getStart()) && end.equals(vehicle.getEnd()));
+  }
+
   /*
    *  Static helper methods
    */

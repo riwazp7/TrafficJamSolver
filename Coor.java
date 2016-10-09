@@ -24,4 +24,8 @@ public class Coor {
   public String toString() {
     return ("("+row+","+col+")");
   }
+
+  public boolean equals(Coor coor) {
+    return (this.row == coor.getRow() && this.col == coor.getCol());
+  }
 }

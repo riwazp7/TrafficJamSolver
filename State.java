@@ -10,6 +10,9 @@ public class State implements Comparable<State> {
   private final static int DEFAULT_ROW = 6;
   private final static int DEFAULT_COL = 6;
 
+  // Moves taken so far from the initial state.
+  int movesSoFar;
+
   // Tracks empty coordinates on the board
   boolean[][] board;
 
@@ -34,6 +37,7 @@ public class State implements Comparable<State> {
     this.row = row;
     this.col = col;
     this.exit = exit;
+    this.movesSoFar = 0;
     carList = new ArrayList<Vehicle>();
     board = new boolean[row][col];
     for (Pair<Coor, Coor> pair : positions) {
@@ -62,6 +66,7 @@ public class State implements Comparable<State> {
     this.carList = carList;
     this.redCar = new RedCar(pastState.getRedCar());
     this.exit = pastState.getExit();
+    this.movesSoFar = pastState.getMovesSoFar();
     markBoard();
   }
 
@@ -127,11 +132,15 @@ public class State implements Comparable<State> {
     return col;
   }
 
+  public int getMovesSoFar() {
+    return movesSoFar;
+  }
+
   public int totalVehicles() {
     return carList.size();
   }
 
-  public void printState() {
+  public void printBoardState() {
     for (int i = 0; i < row; i++) {
       for (int j = 0; j < col; j++) {
         if (board[i][j]) {
@@ -154,10 +163,12 @@ public class State implements Comparable<State> {
   }
 
   public void moveA(int index) {
+    movesSoFar += 1;
     carList.get(index).moveA(this);
   }
 
   public void moveB(int index) {
+    movesSoFar += 1;
     carList.get(index).moveB(this);
   }
 
@@ -179,6 +190,31 @@ public class State implements Comparable<State> {
   }
 
   public int compareTo(State s) {
-    return this.redCar.getHeuristicValue(this).compareTo(s.getRedCar().getHeuristicValue(s));
+    return getEstimatedCost().compareTo(s.getEstimatedCost());
+  }
+
+  public Integer getEstimatedCost() {
+    return new Integer(redCar.getHeuristicValue(this) + this.movesSoFar);
+  }
+
+  public boolean equals(State s) {
+    for (int i = 0; i < carList.size(); i++) {
+      if (!s.getCarList().get(i).equals(carList.get(i))) {
+        return false;
+      }
+    }
+    if (!redCar.equals(s.getRedCar())) {
+      return false;
+    }
+    return true;
+  }
+
+  public int hashCode() {
+    String hash = "";
+    for (int j = 0; j < col; j++) {
+      if (board[2][j]) hash += "1";
+      else hash += "0";
+    }
+    return Integer.parseInt(hash);
   }
 }

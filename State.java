@@ -209,12 +209,12 @@ public class State implements Comparable<State> {
     return true;
   }
 
-  public int hashCode() {
-    String hash = "";
-    for (int j = 0; j < col; j++) {
-      if (board[2][j]) hash += "1";
-      else hash += "0";
-    }
-    return Integer.parseInt(hash);
+  public int nothashCode() {
+    int hash = carList.get(0).getStart().getRow() * 10 + carList.get(0).getStart().getCol();
+    hash = hash * 100 + redCar.getStart().getRow()* 10 + redCar.getStart().getCol();
+    hash = hash * 100 + carList.get(3).getStart().getRow() * 10 + carList.get(3).getStart().getCol();
+    hash = hash * 100 + carList.get(5).getStart().getRow() * 10 + carList.get(5).getStart().getCol();
+    hash = hash * 100 + carList.get(4).getStart().getRow() * 10 + carList.get(4).getStart().getCol();
+    return hash;
   }
 }

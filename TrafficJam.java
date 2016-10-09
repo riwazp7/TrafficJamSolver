@@ -8,12 +8,12 @@ import java.util.HashSet;
 public final class TrafficJam {
 
   public static void main(String[] args) {
-    State stateA = TrafficJam.getStateA();
+    State startState = TrafficJam.getStateB();
 
 
     HashSet<State> seen = new HashSet<State>();
-    seen.add(stateA);
-    PriorityQueue<State> queue = stateA.getAllAdjacentStates();
+    seen.add(startState);
+    PriorityQueue<State> queue = startState.getAllAdjacentStates();
     while (true) {
       PriorityQueue<State> newQueue = queue.poll().getAllAdjacentStates();
       for (State state : newQueue) {
@@ -63,6 +63,22 @@ public final class TrafficJam {
     Pair<Coor, Coor> red = new Pair<Coor, Coor>(new Coor(3,4), new Coor(4,4));
 
     State state = new State(vehicles, red, new Coor(0,4));
+    return state;
+  }
+
+  public static State getStateZ() {
+    ArrayList<Pair<Coor, Coor>> vehicles = new ArrayList<Pair<Coor, Coor>>();
+
+    vehicles.add(new Pair<Coor, Coor>(new Coor(0,3), new Coor(1,3)));
+    vehicles.add(new Pair<Coor, Coor>(new Coor(0,4), new Coor(0,5)));
+    vehicles.add(new Pair<Coor, Coor>(new Coor(1,4), new Coor(1,5)));
+    vehicles.add(new Pair<Coor, Coor>(new Coor(2,0), new Coor(3,0)));
+    vehicles.add(new Pair<Coor, Coor>(new Coor(2,4), new Coor(2,5)));
+    vehicles.add(new Pair<Coor, Coor>(new Coor(4,2), new Coor(4,4)));
+
+    Pair<Coor, Coor> red = new Pair<Coor, Coor>(new Coor(3,5), new Coor(4,5));
+
+    State state = new State(vehicles, red, new Coor(0,5));
     return state;
   }
 

@@ -143,18 +143,20 @@ public class State implements Comparable<State> {
     return redCar.canExit(this);
   }
 
-  public void printBoardState() {
+  public String getBoardState() {
+    String result = "";
     for (int i = 0; i < row; i++) {
       for (int j = 0; j < col; j++) {
         if (board[i][j]) {
-          System.out.print("1 ");
+          result+=("1 ");
         } else {
-          System.out.print("0 ");
+          result+=("0 ");
         }
       }
-      System.out.println();
+      result += "\n";
     }
-    System.out.println();
+    result += "\n";
+    return result;
   }
 
   /*
@@ -205,13 +207,26 @@ public class State implements Comparable<State> {
     return new Integer(redCar.getHeuristicValue(this) + this.movesSoFar);
   }
 
-  public boolean equals(State s) {
-    for (int i = 0; i < carList.size(); i++) {
-      if (!s.getCarList().get(i).equals(carList.get(i))) {
-        return false;
-      }
+  public String toString() {
+    String result = getBoardState();
+    for (Vehicle vehicle : carList) {
+      result += (vehicle.toString() + "\n");
     }
-    return true;
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof State) {
+      State s = (State) obj;
+      for (int i = 0; i < carList.size(); i++) {
+        if (!s.getCarList().get(i).equals(carList.get(i))) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
   public int hashCode() {

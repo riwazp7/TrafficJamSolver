@@ -38,7 +38,11 @@ public class RedCar extends Vehicle implements RedCarInterface {
     return value;
   }
 
-  public boolean equals(Vehicle vehicle) {
-    return (start.equals(vehicle.getStart()) && end.equals(vehicle.getEnd()));
+  public boolean equals(Object obj) {
+    if (obj instanceof RedCar) {
+      RedCar vehicle = (RedCar) obj;
+      return (start.equals(vehicle.getStart()) && end.equals(vehicle.getEnd()));
+    }
+    return false;
   }
 }

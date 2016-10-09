@@ -113,8 +113,16 @@ public class Vehicle implements VehicleInterface {
     }
   }
 
-  public boolean equals(Vehicle vehicle) {
-    return (start.equals(vehicle.getStart()) && end.equals(vehicle.getEnd()));
+  public boolean equals(Object obj) {
+    if (obj instanceof Vehicle) {
+      Vehicle vehicle = (Vehicle) obj;
+      return (start.equals(vehicle.getStart()) && end.equals(vehicle.getEnd()));
+    }
+    return false;
+  }
+
+  public String toString() {
+    return start.toString() + " " + end.toString();
   }
 
   /*

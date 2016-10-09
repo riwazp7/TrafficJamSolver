@@ -20,12 +20,11 @@ public final class TrafficJam {
     ArrayList<State> seen = new ArrayList<State>();
     seen.add(startState);
     PriorityQueue<State> queue = startState.getAllAdjacentStates();
-    while (true) {
+    while (queue.size() > 0) {
       PriorityQueue<State> newQueue = queue.poll().getAllAdjacentStates();
       for (State state : newQueue) {
         if (state.done()) {
-          System.out.println("****DONE****");
-          state.printBoardState();
+          System.out.println(state);
           System.out.println(state.getEstimatedCost());
           return;
         }
@@ -35,6 +34,7 @@ public final class TrafficJam {
         }
       }
     }
+    System.out.println(seen.size());
   }
 
   public static State getStateA() {

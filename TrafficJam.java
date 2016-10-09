@@ -9,11 +9,14 @@ public final class TrafficJam {
 
   public static void main(String[] args) {
     State startState = TrafficJam.getStateC();
+
+    /*
     startState.printBoardState();
     for (State st : startState.getAllAdjacentStates()) {
       st.printBoardState();
     }
-    /*
+    */
+
     ArrayList<State> seen = new ArrayList<State>();
     seen.add(startState);
     PriorityQueue<State> queue = startState.getAllAdjacentStates();
@@ -32,7 +35,6 @@ public final class TrafficJam {
         }
       }
     }
-    */
   }
 
   public static State getStateA() {

@@ -34,11 +34,11 @@ public class State implements Comparable<State> {
     this.exit = exit;
     this.movesSoFar = 0;
     this.redCar = new RedCar(redCarPos);
-    carList.add(redCar);
     board = new boolean[row][col];
     for (Pair<Coor, Coor> pair : positions) {
       carList.add(new Vehicle(pair));
     }
+    carList.add(redCar);
     markBoard();
   }
 
@@ -48,11 +48,11 @@ public class State implements Comparable<State> {
   public State(State pastState) {
     this.redCar = new RedCar(pastState.getRedCar());
     ArrayList<Vehicle> carList = new ArrayList<Vehicle>();
-    carList.add(redCar);
     ArrayList<Vehicle> oldCarList = pastState.getCarList();
-    for (int i = 1; i < oldCarList.size(); i++) {
+    for (int i = 0; i < oldCarList.size() - 1; i++) {
       carList.add(new Vehicle(oldCarList.get(i)));
     }
+    carList.add(redCar);
     this.carList = carList;
     this.board = new boolean[row][col];
     this.exit = pastState.getExit();
@@ -210,9 +210,6 @@ public class State implements Comparable<State> {
       if (!s.getCarList().get(i).equals(carList.get(i))) {
         return false;
       }
-    }
-    if (!redCar.equals(s.getRedCar())) {
-      return false;
     }
     return true;
   }

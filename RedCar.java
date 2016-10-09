@@ -42,9 +42,8 @@ public class RedCar extends Vehicle implements RedCarInterface {
         return value;
       } else if (state.isMarked(new Coor(currCoor.getRow() -1 , currCoor.getCol()))) {
         value += 1;
-      } else {
-        currCoor = new Coor(currCoor.getRow() - 1, currCoor.getCol());
       }
+      currCoor = new Coor(currCoor.getRow() - 1, currCoor.getCol());
     }
   }
 }

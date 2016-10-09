@@ -61,7 +61,7 @@ public class State implements Comparable<State> {
     this.board = new boolean[row][col];
     this.carList = carList;
     this.redCar = new RedCar(pastState.getRedCar());
-    this.exit = exit;
+    this.exit = pastState.getExit();
     markBoard();
   }
 
@@ -97,7 +97,7 @@ public class State implements Comparable<State> {
 
   // Handles out of board coordinates too
   public boolean isMarked(Coor coor) {
-    if (coor.getRow() >= row || coor.getCol() >= col) {
+    if (coor.getRow() >= row || coor.getRow() < 0 || coor.getCol() >= col || coor.getCol() < 0) {
       return true;
     }
     return board[coor.getRow()][coor.getCol()];
@@ -163,7 +163,7 @@ public class State implements Comparable<State> {
 
   public PriorityQueue<State> getAllAdjacentStates() {
     PriorityQueue<State> result = new PriorityQueue<State>();
-    for (int i = 0; i <= carList.size(); i++) {
+    for (int i = 0; i < carList.size(); i++) {
       if (canMoveA(i)) {
         State newState = new State(this);
         newState.moveA(i);

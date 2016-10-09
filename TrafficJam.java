@@ -2,26 +2,17 @@
  * (c) RIWAZ POUDYAL 2016
  */
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public final class TrafficJam {
 
   public static void main(String[] args) {
     State stateA = TrafficJam.getStateA();
     stateA.printState();
-    State stateAcopy = new State(stateA);
-    stateAcopy.printState();
-    stateAcopy.moveA(3);
-
-    stateA.printState();
-    stateAcopy.printState();
-  }
-
-  public static boolean dfs(State state) {
-      boolean found = false;
-      for (int i = 0; i < state.totalVehicles(); i++) {
-
-      }
-      return false;
+    PriorityQueue<State> queue = stateA.getAllAdjacentStates();
+    while (queue.size() != 0) {
+      queue.poll().printState();
+    }
   }
 
   public static State getStateA() {

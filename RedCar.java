@@ -33,7 +33,18 @@ public class RedCar extends Vehicle implements RedCarInterface {
     }
   }
 
-  public Integer getHeuristicValue() {
-    return 0;
+  public Integer getHeuristicValue(State state) {
+    Integer value = new Integer(0);
+    Coor exit = state.getExit();
+    Coor currCoor = start;
+    while(true) {
+      if (currCoor.getRow() == exit.getRow()) {
+        return value;
+      } else if (state.isMarked(new Coor(currCoor.getRow() -1 , currCoor.getCol()))) {
+        value += 1;
+      } else {
+        currCoor = new Coor(currCoor.getRow() - 1, currCoor.getCol());
+      }
+    }
   }
 }

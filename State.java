@@ -179,6 +179,6 @@ public class State implements Comparable<State> {
   }
 
   public int compareTo(State s) {
-    return this.redCar.getHeuristicValue().compareTo(s.getRedCar().getHeuristicValue());
+    return this.redCar.getHeuristicValue(this).compareTo(s.getRedCar().getHeuristicValue(s));
   }
 }
